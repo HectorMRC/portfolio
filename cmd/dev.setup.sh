@@ -1,12 +1,19 @@
-#/bin/bash
+#/bin/sh
 
 # eval "$(ssh-agent -s)"
 # if !(ssh-add ~/.ssh/git_rsa); then
 #     return 1
 # fi
 
+sudo apt -y update
+sudo apt -y upgrade
+
 if !(unzip --version); then
     sudo apt -y install unzip
+fi
+
+if !(zip --version); then
+    sudo apt install zip
 fi
 
 if !(autoconf --version); then
@@ -30,40 +37,44 @@ if !(make --version); then
 fi
 
 if !(tree --version); then
-    sudo apt install tree
+    sudo apt -y install tree
+fi
+
+if !(clang --version); then
+    sudo apt -y install clang
+    sudo apt -y install protobuf-c-compiler
 fi
 
 if !(g++ --version); then
-    sudo apt install g++
+    sudo apt -y install g++
 fi
 
+
 if !(figlet -v); then
-    sudo apt install figlet
+    sudo apt -y install figlet
 fi
 
 if !(docker --version); then
-    sudo apt install -y docker.io
+    sudo apt -y install docker.io
     sudo groupadd docker
     sudo gpasswd -a $USER docker
 fi
 
 if !(protoc --version); then
-    curl -LO https://github.com/protocolbuffers/protobuf/archive/v3.12.3.zip
+    curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v3.12.3/protoc-3.12.3-linux-x86_64.zip
     
-    unzip v3.12.3.zip
-    rm -rf v3.12.3.zip
+    unzip protoc-3.12.3-linux-x86_64.zip -d protoc-3.12.3-linux-x86_64
+    rm -rf protoc-3.12.3-linux-x86_64.zip
 
-    cd ./protobuf-3.12.3
-    ./autogen.sh && ./configure
-    make && make check && make install
-    
-    cd ..
-    sudo ldconfig # refresh shared librery cache.
+    sudo mv protoc-3.12.3-linux-x86_64/bin/protoc /usr/bin
+    sudo mv protoc-3.12.3-linux-x86_64/include/* /usr/include
+    rm -rf protoc-3.12.3-linux-x86_64
 fi
 
 if !(go version); then
     curl -LO https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz
     sudo tar -C /usr/local -xzf go1.14.4.linux-amd64.tar.gz
+    rm -rf go1.14.4.linux-amd64.tar.gz
 
     GO_VERSION=$(go version)
     if !(go version); then
@@ -71,14 +82,44 @@ if !(go version); then
         return 1
     fi
 
-    printf "\n\n# Added automatically by a setup script at $(date)" $USER >> ~/.bashrc
-    printf "\nexport PATH=\$PATH:/usr/local/go/bin\n" $USER >> ~/.bashrc
+    printf "\n\n# Updated by a setup script at $(date)\n" $USER >> ~/.bashrc
+    printf "export PATH=\$PATH:/usr/local/go/bin\n" $USER >> ~/.bashrc
+    printf "export GO111MODULE=on  # Enable module mode\n" $USER >> ~/.bashrc
+    printf "export PATH=\"\$PATH:$(go env GOPATH)/bin\"\n" $USER >> ~/.bashrc
 
-    rm -rf go1.14.4.linux-amd64.tar.gz
+    export PATH=$PATH:/usr/local/go/bin
+    export GO111MODULE=on
+    export PATH="$PATH:$(go env GOPATH)/bin"
+
+    go get github.com/golang/protobuf/protoc-gen-go
 fi
 
-sudo apt update
-sudo apt upgrade
+if !(rustc --version); then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    curl https://sh.rustup.rs -sSf | bash -s -- -y
+    
+    printf "\n\n# Updated by a setup script at $(date)\n" $USER >> ~/.bashrc
+    printf "export PATH=\$PATH:\$HOME/.cargo/bin\n" $USER >> ~/.bashrc
+
+    export PATH=$PATH:$HOME/.cargo/bin
+
+    cargo install bindgen
+    cargo install --version 1.5.1 protobuf
+fi
+
+if !(npm --version); then
+    sudo apt -y install npm
+    sudo npm install npm@latest -g
+fi
+
+if !(npm view react version); then
+    npm install react
+    npm install -g create-react-app
+fi
+
+if !(npm view typescript version); then
+    npm install typescript --save-dev
+fi
 
 figlet "This is your ubuntu :)"
 echo "Done."
