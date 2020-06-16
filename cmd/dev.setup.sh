@@ -1,9 +1,7 @@
 #/bin/sh
 
 # eval "$(ssh-agent -s)"
-# if !(ssh-add ~/.ssh/git_rsa); then
-#     return 1
-# fi
+# ssh-add ~/.ssh/git_rsa)
 
 sudo apt -y update
 sudo apt -y upgrade
@@ -76,18 +74,10 @@ if !(go version); then
     sudo tar -C /usr/local -xzf go1.14.4.linux-amd64.tar.gz
     rm -rf go1.14.4.linux-amd64.tar.gz
 
-    GO_VERSION=$(go version)
-    if !(go version); then
-        echo "Golang not reachable"
-        return 1
-    fi
-
     printf "\n\n# Updated by a setup script at $(date)\n" $USER >> ~/.bashrc
-    printf "export PATH=\$PATH:/usr/local/go/bin\n" $USER >> ~/.bashrc
     printf "export GO111MODULE=on  # Enable module mode\n" $USER >> ~/.bashrc
     printf "export PATH=\"\$PATH:$(go env GOPATH)/bin\"\n" $USER >> ~/.bashrc
 
-    export PATH=$PATH:/usr/local/go/bin
     export GO111MODULE=on
     export PATH="$PATH:$(go env GOPATH)/bin"
 
@@ -96,11 +86,9 @@ fi
 
 if !(rustc --version); then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    curl https://sh.rustup.rs -sSf | bash -s -- -y
     
     printf "\n\n# Updated by a setup script at $(date)\n" $USER >> ~/.bashrc
     printf "export PATH=\$PATH:\$HOME/.cargo/bin\n" $USER >> ~/.bashrc
-
     export PATH=$PATH:$HOME/.cargo/bin
 
     cargo install bindgen
@@ -119,6 +107,27 @@ fi
 
 if !(npm view typescript version); then
     npm install typescript --save-dev
+    npm install protobuf-typescript
+    npm install ts-protoc-gen
+fi
+
+if !(npm view grpc-web version); then
+    npm install grpc-web
+fi
+
+if !(flutter --version); then
+    curl -LO https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_1.17.3-stable.tar.xz
+    tar -xf flutter_linux_1.17.3-stable.tar.xz
+    
+    rm -rf flutter_linux_1.17.3-stable.tar.xz
+    sudo mv flutter /usr/local
+
+    printf "\n\n# Updated by a setup script at $(date)\n" $USER >> ~/.bashrc
+    printf "export PATH=\$PATH:/usr/local/flutter/bin\n" $USER >> ~/.bashrc
+    export PATH=$PATH:/usr/local/flutter/bin
+
+    flutter --verbose precache
+    flutter --verbose doctor
 fi
 
 figlet "This is your ubuntu :)"
