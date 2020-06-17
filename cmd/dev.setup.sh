@@ -6,6 +6,8 @@
 sudo apt -y update
 sudo apt -y upgrade
 
+### ESSENTIAL TOOLS ###
+
 if !(unzip --version); then
     sudo apt -y install unzip
 fi
@@ -52,6 +54,8 @@ if !(figlet -v); then
     sudo apt -y install figlet
 fi
 
+### BACKEND TOOLS ###
+
 if !(docker --version); then
     sudo apt -y install docker.io
     sudo groupadd docker
@@ -75,11 +79,9 @@ if !(go version); then
     rm -rf go1.14.4.linux-amd64.tar.gz
 
     printf "\n\n# Updated by a setup script at $(date)\n" $USER >> ~/.bashrc
+    printf "export PATH=\$PATH:/usr/local/go/bin\n" $USER >> ~/.bashrc
     printf "export GO111MODULE=on  # Enable module mode\n" $USER >> ~/.bashrc
     printf "export PATH=\"\$PATH:$(go env GOPATH)/bin\"\n" $USER >> ~/.bashrc
-
-    export GO111MODULE=on
-    export PATH="$PATH:$(go env GOPATH)/bin"
 
     go get github.com/golang/protobuf/protoc-gen-go
 fi
@@ -89,11 +91,12 @@ if !(rustc --version); then
     
     printf "\n\n# Updated by a setup script at $(date)\n" $USER >> ~/.bashrc
     printf "export PATH=\$PATH:\$HOME/.cargo/bin\n" $USER >> ~/.bashrc
-    export PATH=$PATH:$HOME/.cargo/bin
 
     cargo install bindgen
     cargo install --version 1.5.1 protobuf
 fi
+
+### FRONTEND TOOLS ###
 
 if !(npm --version); then
     sudo apt -y install npm
@@ -115,20 +118,20 @@ if !(npm view grpc-web version); then
     npm install grpc-web
 fi
 
-if !(flutter --version); then
-    curl -LO https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_1.17.3-stable.tar.xz
-    tar -xf flutter_linux_1.17.3-stable.tar.xz
-    
-    rm -rf flutter_linux_1.17.3-stable.tar.xz
-    sudo mv flutter /usr/local
-
-    printf "\n\n# Updated by a setup script at $(date)\n" $USER >> ~/.bashrc
-    printf "export PATH=\$PATH:/usr/local/flutter/bin\n" $USER >> ~/.bashrc
-    export PATH=$PATH:/usr/local/flutter/bin
-
-    flutter --verbose precache
-    flutter --verbose doctor
-fi
+# Flutter installation
+# if !(flutter --version); then
+#     curl -LO https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_1.17.3-stable.tar.xz
+#     tar -xf flutter_linux_1.17.3-stable.tar.xz
+#     
+#     rm -rf flutter_linux_1.17.3-stable.tar.xz
+#     sudo mv flutter /usr/local
+# 
+#     printf "\n\n# Updated by a setup script at $(date)\n" $USER >> ~/.bashrc
+#     printf "export PATH=\$PATH:/usr/local/flutter/bin\n" $USER >> ~/.bashrc
+# 
+#     flutter --verbose precache
+#     flutter --verbose doctor
+# fi
 
 figlet "This is your ubuntu :)"
 echo "Done."
