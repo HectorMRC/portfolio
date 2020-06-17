@@ -1,7 +1,7 @@
 #/bin/sh
 
 # eval "$(ssh-agent -s)"
-# ssh-add ~/.ssh/git_rsa)
+# ssh-add ~/.ssh/git_rsa
 
 sudo apt -y update
 sudo apt -y upgrade
