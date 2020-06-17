@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package proto;
+
+message EchoRequest {
+  int32 clicked = 1; // Can only get values in the interval of [0, 2]
+}
+
+message EchoResponse {
+  bool speed = 1;   // refers to how fast must the project be completed
+  bool cheap = 2;   // refers to how many resources are available
+  bool quality = 3; // refers to how many features are required
+}
+
+service EchoService {
+  rpc Echo(EchoRequest) returns (EchoResponse);
+}
