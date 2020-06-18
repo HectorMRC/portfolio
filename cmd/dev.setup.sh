@@ -1,7 +1,9 @@
 #/bin/sh
 
-# eval "$(ssh-agent -s)"
-# ssh-add ~/.ssh/git_rsa
+if (ls ~/.ssh | grep git_rsa); then
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/git_rsa
+fi
 
 sudo apt -y update
 sudo apt -y upgrade
@@ -84,6 +86,7 @@ if !(go version); then
     printf "export PATH=\"\$PATH:$(go env GOPATH)/bin\"\n" $USER >> ~/.bashrc
 
     go get github.com/golang/protobuf/protoc-gen-go
+    go get google.golang.org/grpc
 fi
 
 if !(rustc --version); then
