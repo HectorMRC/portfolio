@@ -1,7 +1,7 @@
 package echo
 
 const (
-	ServicePort = ":9090"
+	ServicePort = ":8080"
 
 	testAddress = "localhost:8080"
 )
