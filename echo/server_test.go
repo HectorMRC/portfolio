@@ -24,6 +24,7 @@ func TestService(t *testing.T) {
 
 	want := "Testing Echo Service"
 	request := &pb.EchoRequest{Message: want}
+
 	if got, err := client.Echo(ctx, request); err != nil {
 		log.Fatalf("could not greet: %v", err)
 	} else if got.GetMessage() != want {
