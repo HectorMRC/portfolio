@@ -27,6 +27,6 @@ func TestService(t *testing.T) {
 	if got, err := client.Echo(ctx, request); err != nil {
 		log.Fatalf("could not greet: %v", err)
 	} else if got.GetMessage() != want {
-		t.Errorf("Got message %s, want %s", got.Message(), want)
+		t.Errorf("Got message %s, want %s", got.GetMessage(), want)
 	}
 }

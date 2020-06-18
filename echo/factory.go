@@ -1,5 +1,5 @@
 package echo
 
-func ImplementedEchoServer() *Server {
-	return &Server{}
+func ImplementedEchoServer() *EchoServer {
+	return &EchoServer{}
 }

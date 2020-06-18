@@ -18,7 +18,7 @@ func main() {
 	grpc_server := grpc.NewServer()
 	echo_server := echo.ImplementedEchoServer()
 
-	pb.RegisterGreeterServer(grpc_server, echo_server)
+	pb.RegisterEchoServer(grpc_server, echo_server)
 	if err := grpc_server.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

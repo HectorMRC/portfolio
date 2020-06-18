@@ -13,6 +13,6 @@ type EchoServer struct {
 
 func (server *EchoServer) Echo(ctx context.Context, in *pb.EchoRequest) (out *pb.EchoResponse, err error) {
 	log.Printf("Received: %v", in.GetMessage())
-	out = &pb.EchoResponse{Message: "echo: " + in.GetMessage()}
+	out = &pb.EchoResponse{Message: in.GetMessage()}
 	return
 }
