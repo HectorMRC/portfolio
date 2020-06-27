@@ -14,5 +14,8 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-# Build metadata directory
-build/
+# Client site
+node_modules
+dist
+package-lock.json
+*_pb.js

@@ -4,8 +4,8 @@ import (
 	"log"
 	"net"
 
-	echo "github.com/HectorMRC/portfolio/echo"
-	pb "github.com/HectorMRC/portfolio/proto"
+	echo "github.com/HectorMRC/portfolio/server"
+	pb "github.com/HectorMRC/portfolio/server/proto"
 	"google.golang.org/grpc"
 )
 

@@ -1,10 +1,5 @@
 #/bin/sh
 
-if (ls ~/.ssh | grep git_rsa); then
-    eval "$(ssh-agent -s)"
-    ssh-add ~/.ssh/git_rsa
-fi
-
 sudo apt -y update
 sudo apt -y upgrade
 
@@ -136,7 +131,10 @@ if !(npm view typescript version); then
 fi
 
 if !(npm view grpc-web version); then
-    npm install grpc-web
+    #npm install grpc-web
+    curl -LO https://github.com/grpc/grpc-web/releases/download/1.2.0/protoc-gen-grpc-web-1.2.0-linux-x86_64
+    sudo mv ~/protoc-gen-grpc-web-1.2.0-linux-x86_64 /usr/local/bin/protoc-gen-grpc-web
+    chmod +x /usr/local/bin/protoc-gen-grpc-web
 fi
 
 # Flutter installation
@@ -153,6 +151,11 @@ fi
 #     flutter --verbose precache
 #     flutter --verbose doctor
 # fi
+
+if (ls ~/.ssh | grep git_rsa); then
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/git_rsa
+fi
 
 figlet "Your ubuntu is ready :)"
 echo "Done."
