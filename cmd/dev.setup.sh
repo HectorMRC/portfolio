@@ -71,6 +71,11 @@ if !(docker --version); then
     sudo gpasswd -a $USER docker
 fi
 
+if !(docker-compose --version); then
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.26.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+fi
+
 if !(protoc --version); then
     curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v3.12.3/protoc-3.12.3-linux-x86_64.zip
     
