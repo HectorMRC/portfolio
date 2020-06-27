@@ -2,7 +2,6 @@ package echo
 
 import (
 	"context"
-	"log"
 	"testing"
 	"time"
 
@@ -13,7 +12,7 @@ import (
 func TestService(t *testing.T) {
 	conn, err := grpc.Dial(testAddress, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		t.Errorf("Cannot connect: %v", err)
 	}
 
 	defer conn.Close()
@@ -26,7 +25,7 @@ func TestService(t *testing.T) {
 	request := &pb.EchoRequest{Message: want}
 
 	if got, err := client.Echo(ctx, request); err != nil {
-		log.Fatalf("could not greet: %v", err)
+		t.Errorf("Got an error from server: %v", err)
 	} else if got.GetMessage() != want {
 		t.Errorf("Got message %s, want %s", got.GetMessage(), want)
 	}

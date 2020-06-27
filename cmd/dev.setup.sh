@@ -8,6 +8,13 @@ fi
 sudo apt -y update
 sudo apt -y upgrade
 
+### BREAKPOINT ###
+if !(cat ~/.bashrc | grep @dev.setup.sh); then
+    printf "\n\n# Configuration from @dev.setup.sh script\n" $USER >> ~/.bashrc
+    printf "# Updated by a setup script at $(date)\n" $USER >> ~/.bashrc
+    printf "export PATH=$PATH\n" $USER >> ~/.bashrc
+fi
+
 ### ESSENTIAL TOOLS ###
 
 if !(unzip --version); then
@@ -73,6 +80,12 @@ if !(protoc --version); then
     sudo mv protoc-3.12.3-linux-x86_64/bin/protoc /usr/bin
     sudo mv protoc-3.12.3-linux-x86_64/include/* /usr/include
     rm -rf protoc-3.12.3-linux-x86_64
+
+    curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v3.12.3/protobuf-cpp-3.12.3.tar.gz
+    tar -xzf protobuf-cpp-3.12.3.tar.gz
+    rm -rf protobuf-cpp-3.12.3.tar.gz
+    
+    cd protobuf-3.12.3 && ./configure
 fi
 
 if !(go version); then
@@ -136,5 +149,5 @@ fi
 #     flutter --verbose doctor
 # fi
 
-figlet "This is your ubuntu :)"
+figlet "Your ubuntu is ready :)"
 echo "Done."
