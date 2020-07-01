@@ -1,5 +1,5 @@
 proxy:
-	docker build -t portfolio/envoy -f ./docker/envoy.dockerfile .
+	docker build -t portfolio/envoy:0.1.0 -f ./docker/envoy.dockerfile .
 	docker run -it -p 8080:8080 -p 9901:9901 --network=host portfolio/envoy
 
 proto:

@@ -2,6 +2,5 @@ package server
 
 const (
 	ServicePort = ":9090"
-
-	testAddress = "localhost:8080"
+	testAddress = "localhost:9090"
 )

@@ -1,6 +1,6 @@
 const { EchoRequest, EchoResponse } = require("./echo_pb")
 const { EchoClient } = require("./echo_grpc_web_pb")
-var client = new EchoClient('http://localhost:8080');
+var client = new EchoClient('localhost:8080');
 
 var request = new EchoRequest()
 
