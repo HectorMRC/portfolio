@@ -1,6 +1,6 @@
 proxy:
 	docker build -t portfolio/envoy:0.1.0 -f ./docker/envoy.dockerfile .
-	docker run -it -p 8080:8080 -p 9901:9901 --network=host portfolio/envoy
+	docker run -it -p 8080:8080 -p 9901:9901 --network=host portfolio/envoy:0.1.0
 
 proto:
 	# Server site - protobuf
@@ -10,4 +10,8 @@ proto:
 	
 #client:
 #	npm install
+# 	npm audit fix
 #	npx webpack client.js
+#	python3 -m http.server 8081 &
+
+clean:
