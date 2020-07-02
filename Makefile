@@ -2,6 +2,10 @@ proxy:
 	docker build -t portfolio/envoy:0.1.0 -f ./docker/envoy.dockerfile .
 	docker run -it -p 8080:8080 -p 9901:9901 --network=host portfolio/envoy:0.1.0
 
+server:
+	docker build -t portfolio/server:0.1.0 -f ./docker/server.dockerfile .
+	docker run -it -p 9090:9090 portfolio/envoy:0.1.0
+
 proto:
 	# Server site - protobuf
 	protoc --go_out=plugins=grpc:server --go_opt=paths=source_relative proto/echo.proto
