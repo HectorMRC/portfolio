@@ -1,26 +1,41 @@
-version: '3'
+version: '3.8'
+
 services:
     builder:
-        build:
-            context: .
-            target: golang:latest
+        container_name: builder
+        image: golang:latest
         volumes:
-            - ./build:./
-        working_dir: /app
+            - ../server:/source:ro
+            - ../build:/build:rw
         environment:
-            MAINTAINER: "Hector Morales <hector.morales.carnice@gmail.com>"
-        links:
-            - server
+            CGO_ENABLED: 0
+            GOOS: linux
+
+        command: go mod download && go build -a -installsuffix cgo -o /build/main /source/main.go
 
     server:
-        build:
-            context: .
-            target: alpine:latest
+        container_name: server
+        image: alpine:latest
         volumes:
-            - .:/app
+            - ../build:/build:ro
         ports:
             - "9090:9090"
-        working_dir: /app
+        links:
+            - builder
+        command: /build/main
+    
+    envoy:
+        container_name: envoy
+        image: envoyproxy/envoy:v1.14-latest
+        volumes:
+            - ../envoy:/etc/envoy:ro
+        ports:
+            - "8080:8080"
+            - "9901:9901"
+            
+        command: /usr/local/bin/envoy -c /etc/envoy/envoy.yaml
+
 volumes:
-    logvolume01: {}
-        
+    build-volume:
+
+# docker-compose -f docker/docker-compose.yaml up

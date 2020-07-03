@@ -10,7 +10,8 @@ import (
 )
 
 func main() {
-	lis, err := net.Listen("tcp", echo.ServicePort)
+	srv_port := echo.ServicePort
+	lis, err := net.Listen("tcp", srv_port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -19,6 +20,7 @@ func main() {
 	echo_server := echo.ImplementedEchoServer()
 
 	pb.RegisterEchoServer(grpc_server, echo_server)
+	log.Fatalf("server listening to: %s", srv_port)
 	if err := grpc_server.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
