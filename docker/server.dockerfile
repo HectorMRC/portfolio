@@ -4,10 +4,10 @@ LABEL maintainer="Hector Morales <hector.morales.carnice@gmail.com>"
 
 WORKDIR /build
 
-COPY server/go.mod server/go.sum ./
+COPY go.mod go.sum ./
 RUN go mod download
 
-COPY ./server/main.go .
+COPY main.go .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /server/main main.go
 
 ######## Start a new stage from scratch #######
