@@ -5,36 +5,37 @@ services:
         container_name: builder
         image: golang:latest
         volumes:
-            - ../server:/source:ro
-            - ../build:/build:rw
+            - ../:/source
+            - build-volume:/usr/src/app
         environment:
-            CGO_ENABLED: 0
-            GOOS: linux
+            - GO111MODULE=on
+            - CGO_ENABLED=0
+            - GOOS=linux
 
-        command: go mod download && go build -a -installsuffix cgo -o /build/main /source/main.go
+        command: go mod download && go build -a -installsuffix cgo -o /usr/src/app/main /source/main.go
 
     server:
         container_name: server
         image: alpine:latest
         volumes:
-            - ../build:/build:ro
+            - build-volume:/usr/src/app
         ports:
             - "9090:9090"
         links:
             - builder
-        command: /build/main
+        command: /usr/src/app/main
     
     envoy:
         container_name: envoy
         image: envoyproxy/envoy:v1.14-latest
         volumes:
-            - ../envoy:/etc/envoy:ro
+            - ../envoy:/etc/envoy
         ports:
             - "8080:8080"
             - "9901:9901"
             
         command: /usr/local/bin/envoy -c /etc/envoy/envoy.yaml
-
+    
 volumes:
     build-volume:
 

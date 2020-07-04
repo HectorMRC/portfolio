@@ -20,7 +20,6 @@ func main() {
 	echo_server := echo.ImplementedEchoServer()
 
 	pb.RegisterEchoServer(grpc_server, echo_server)
-	log.Fatalf("server listening to: %s", srv_port)
 	if err := grpc_server.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
